@@ -126,13 +126,13 @@ function drawBricks() {
 
 
 function drawScore() {
-    ctx.font = "16px Arial";
+    ctx.font = "16px times";
     ctx.fillStyle = "black";
     ctx.fillText("Score: " + score, 8, 20);
 }
 
 function drawLives() {
-    ctx.font = "16px Arial";
+    ctx.font = "16px verdana";
     ctx.fillStyle = "black";
     ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
 }
