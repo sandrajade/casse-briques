@@ -7,11 +7,15 @@
 
 canvas {
 
+    border: 2px solid grey;
     display: block;
-    margin: 0, auto;
+    margin: center;
+    width: 50em;
+    height: 30em;
 }
 
 #myCanvas {
-    width: 48em;
-    height: 32em;
+    margin-top: 10px;
+    
 }
+

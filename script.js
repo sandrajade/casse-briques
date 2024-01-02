@@ -1,25 +1,26 @@
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
-let ballRadius = 10;
+let ballRadius = 6;
 let x = canvas.width / 2;
 let y = canvas.height - 30;
 let dx = 2;
 let dy = -2;
-let paddleHeight = 10;
-let paddleWidth = 75;
+let paddleHeight = 15;
+let paddleWidth = 55;
 let paddleX = (canvas.width - paddleWidth) / 2;
 let rightPressed = false;
 let leftPressed = false;
-let brickRowCount = 5;
-let brickColumnCount = 3;
-let brickWidth = 75;
-let brickHeight = 20;
-let brickPadding = 10;
+let brickRowCount = 4;
+let brickColumnCount = 4;
+let brickWidth = 50;
+let brickHeight = 15;
+let brickPadding = 3;
 let brickOffsetTop = 30;
 let brickOffsetLeft = 30;
+let brickBorderRadius = 10;
 let score = 0;
 let lives = 3;
-
+let bounceSound = new Audio('bounce.wav');
 let bricks = [];
 for (let c = 0; c < brickColumnCount; c++) {
     bricks[c] = [];
@@ -31,6 +32,7 @@ for (let c = 0; c < brickColumnCount; c++) {
         };
     }
 }
+
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
@@ -86,6 +88,14 @@ function drawBall() {
 }
 
 function drawPaddle() {
+    ctx.save();
+
+    if(x > paddleX && x < paddleWidth) {
+        ctx.globalAlpha = 0.5;
+    } else {
+        ctx.globalAlpha = 1.0;
+    }
+
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
     ctx.fillStyle = "#0095DD";
@@ -95,6 +105,7 @@ function drawPaddle() {
     ctx.shadowOffsetY = 5;
     ctx.fill();
     ctx.closePath();
+    ctx.restore();
 }
 
 function drawBricks() {
@@ -123,18 +134,26 @@ function drawBricks() {
     }
 }
 
-
-
 function drawScore() {
-    ctx.font = "16px times";
+    ctx.font = "10px times";
     ctx.fillStyle = "black";
     ctx.fillText("Score: " + score, 8, 20);
 }
 
 function drawLives() {
-    ctx.font = "16px verdana";
+    ctx.font = "10px verdana";
     ctx.fillStyle = "black";
     ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
+}
+
+function restartGame() {
+    x = canvas.width / 2;
+    y = canvas.height - 30;
+    dx = 2;
+    dy = -2;
+    paddleX = (canvas.width - paddleWidth) / 2;
+    rightPressed = false;
+    leftPressed = false;
 }
 
 function draw() {
@@ -158,13 +177,10 @@ function draw() {
             lives--;
             if (!lives) {
                 alert("pas de chance, allez recommence encore une fois");
+                setTimeout(restartGame, 2000);
                 document.location.reload();
             } else {
-                x = canvas.width / 2;
-                y = canvas.height - 30;
-                dx = 3;
-                dy = -3;
-                paddleX = (canvas.width - paddleWidth) / 2;
+                restartGame();
             }
         }
     }
@@ -179,5 +195,4 @@ function draw() {
     y += dy;
     requestAnimationFrame(draw);
 }
-
 draw();
